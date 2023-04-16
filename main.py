@@ -154,9 +154,9 @@ if email_uids:
 
             if result[0] == 'OK':
                     # Mark the original email as deleted
-                    imap_server.uid('STORE', email_id, '+FLAGS', '(\Deleted)')
+                    status = imap_server.uid('STORE', email_id, '+FLAGS', '(\Deleted)')
 
-                    status = logging.debug(f"Succesfully moved email {email_uid_decoded} to {target_mailbox}.")
+                    logging.debug(f"Succesfully moved email {email_uid_decoded} to {target_mailbox}.")
 
                     if status[0] != 'OK':
 
