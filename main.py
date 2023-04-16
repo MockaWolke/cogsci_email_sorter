@@ -92,90 +92,93 @@ logging.info(f"Found {len(email_uids)} new emails in inbox. Now starting to move
 succesfully_moved_uids = []
 
 
+if email_uids:
 
-for email_id in tqdm.tqdm(email_uids):
+    for email_id in tqdm.tqdm(email_uids):
 
-    email_uid_decoded = email_id.decode("UTF-8")
+        email_uid_decoded = email_id.decode("UTF-8")
 
-    try: 
-    
-        email_message = email_utils.fetch_and_process_email(imap_server,email_id)
-
-    except Exception as e:
-
-        logging.error("Failed to fetch and process email {email_uid_decoded}: {e}")
+        try: 
         
-        continue
+            email_message = email_utils.fetch_and_process_email(imap_server,email_id)
 
+        except Exception as e:
 
-    try: 
-        mail_text = email_utils.get_text_wrapper(email_message)
-    except email_utils.InvalidContentTypeError:
-
-        logging.error("Failed to read text of email {email_uid_decoded}. Probably just empty: {e}")
-        
-        continue
-
-    except: 
-        logging.error("Failed to read text of email {email_uid_decoded}: {e}")
-
-        continue
-
-
-    try:
-
-        subject = email_utils.get_subject(email_message)
-        
-        query = subject + '\n' +  mail_text
-
-
-        prediction = predict.get_email_predictions([query])[0]
-
-        if prediction == "Important":
-            logging.debug(f"Email {email_uid_decoded} was identified to be important. Will not be moved.")
-
-            succesfully_moved_uids.append(email_uid_decoded)
+            logging.error("Failed to fetch and process email {email_uid_decoded}: {e}")
+            
             continue
 
-        target_mailbox = f"Inbox.{prediction}"
 
-    except: 
+        try: 
+            mail_text = email_utils.get_text_wrapper(email_message)
+        except email_utils.InvalidContentTypeError:
 
-        logging.error("Failed to collect prediction of email {email_uid_decoded}: {e}")
-
-        continue
-
-
-    try:
-
-        result = imap_server.uid('COPY', email_uid_decoded, target_mailbox)
-
-
-        if result[0] == 'OK':
-                # Mark the original email as deleted
-                imap_server.uid('STORE', email_id, '+FLAGS', '(\Deleted)')
-
-                status,_ = logging.debug(f"Succesfully moved email {email_uid_decoded} to {target_mailbox}.")
-
-                if status != 'OK':
-
-                    logging.error(f"fDeleting email {email_uid_decoded} failed after copying it. {status}")
-
-                
-                else:
-                    succesfully_moved_uids.append(email_uid_decoded)
-
-        else:
+            logging.error("Failed to read text of email {email_uid_decoded}. Probably just empty: {e}")
             
-            logging.error(f"Moving of {email_uid_decoded} to {target_mailbox} failed: {result[0]}")
+            continue
 
-    except Exception as e:
+        except: 
+            logging.error("Failed to read text of email {email_uid_decoded}: {e}")
+
+            continue
 
 
-        logging.error(f"Moving of {email_uid_decoded} to {target_mailbox} failed: {e}")
+        try:
+
+            subject = email_utils.get_subject(email_message)
+            
+            query = subject + '\n' +  mail_text
 
 
+            prediction = predict.get_email_predictions([query])[0]
 
+            if prediction == "Important":
+                logging.debug(f"Email {email_uid_decoded} was identified to be important. Will not be moved.")
+
+                succesfully_moved_uids.append(email_uid_decoded)
+                continue
+
+            target_mailbox = f"Inbox.{prediction}"
+
+        except: 
+
+            logging.error("Failed to collect prediction of email {email_uid_decoded}: {e}")
+
+            continue
+
+
+        try:
+
+            result = imap_server.uid('COPY', email_uid_decoded, target_mailbox)
+
+
+            if result[0] == 'OK':
+                    # Mark the original email as deleted
+                    imap_server.uid('STORE', email_id, '+FLAGS', '(\Deleted)')
+
+                    status = logging.debug(f"Succesfully moved email {email_uid_decoded} to {target_mailbox}.")
+
+                    if status[0] != 'OK':
+
+                        logging.error(f"fDeleting email {email_uid_decoded} failed after copying it. {status}")
+
+                    
+                    else:
+                        succesfully_moved_uids.append(email_uid_decoded)
+
+            else:
+                
+                logging.error(f"Moving of {email_uid_decoded} to {target_mailbox} failed: {result[0]}")
+
+        except Exception as e:
+
+
+            logging.error(f"Moving of {email_uid_decoded} to {target_mailbox} failed: {e}")
+
+
+else:
+
+    logging.info('No new emails found. Logging out now.')
 
 # Loggint Out
 
