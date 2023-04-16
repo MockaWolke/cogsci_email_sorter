@@ -1,6 +1,6 @@
 # COGSCI EMail Sorter
 ## Tame your Inbox with IMAP and Scikit-learn Gradient Boosting
-Tired of drowning in emails about VP hours and job ads? Fear no more! Our program uses IMAP (Internet Message Access Protocol) and Scikit-learn Gradient Boosting to sort incoming emails into categories like "Important", "VP Hours", and "Job Advertisements".
+Tired of drowning in emails about VP hours and job ads? Fear no more! This program uses IMAP (Internet Message Access Protocol) and Scikit-learn Gradient Boosting to sort incoming emails into categories like "Important", "VP Hours", and "Job Advertisements".
 
 
 ## Usage:
@@ -12,7 +12,7 @@ python main.py
 
 The program logs in to your email account using the provided credentials and sorts the emails based on their categories. The emails labeled "Important" stay in the inbox, while "VP_Hours" and "Job_Advertisements" emails move to their respective folders.
 
-Our program remembers the last successful IMAP UID, so it only sorts emails with UIDs higher than the last successful one. This feature ensures that the program doesn't sort the same emails multiple times.
+This program remembers the last successful IMAP UID, so it only sorts emails with UIDs higher than the last successful one. This feature ensures that the program doesn't sort the same emails multiple times.
 
 The program logs every step of the sorting process, including every classification by UID and any errors or exceptions encountered during the process. You'll find log files for every run under the "logs/" directory, with a timestamp for every file.
 
