@@ -59,7 +59,7 @@ logging.info(f"Succesfully logged in to {credentials['user_name']}.")
 
 try:
 
-    email_uids = email_utils.get_all_email_udis(imap_server)[::-1]
+    email_uids = email_utils.get_all_email_udis(imap_server)
 
 except Exception as e:
 
