@@ -12,6 +12,9 @@ python main.py
 
 The program logs in to your email account using the provided credentials and sorts the emails based on their categories. The emails labeled "Important" stay in the inbox, while "VP_Hours" and "Job_Advertisements" emails move to their respective folders.
 
+The program uses Scikit-learn's Gradient Boosting algorithm to classify emails based on their content. The algorithm takes as input a feature vector, which is created by counting the occurrences of certain words in the email's subject and body. These words include "job", "hiwi", and any numbers that appear 10 positions before the letters "vp" in the subject.
+
+
 This program remembers the last successful IMAP UID, so it only sorts emails with UIDs higher than the last successful one. This feature ensures that the program doesn't sort the same emails multiple times.
 
 The program logs every step of the sorting process, including every classification by UID and any errors or exceptions encountered during the process. You'll find log files for every run under the "logs/" directory, with a timestamp for every file.
