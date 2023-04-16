@@ -44,7 +44,7 @@ with open("credentials.json") as f:
 
 try:
 
-    imap_server = imaplib.IMAP4_SSL(credentials["incoming_imap_server"],port= credentials["incoming_port"])
+    imap_server = imaplib.IMAP4_SSL(credentials["incoming_imap_server"], port= credentials["incoming_port"])
     imap_server.login(credentials["user_name"], credentials["password"])
     imap_server.select('INBOX')
 
@@ -94,7 +94,7 @@ succesfully_moved_uids = []
 
 if email_uids:
 
-    for email_id in tqdm.tqdm(email_uids):
+    for email_id in tqdm.tqdm(email_uids, desc= "sorting your emails."):
 
         email_uid_decoded = email_id.decode("UTF-8")
 
@@ -200,6 +200,9 @@ except Exception as e:
 
 
 try:
+
+    if len(email_uids) == 0:
+        exit()
 
     # print new best uid
 
