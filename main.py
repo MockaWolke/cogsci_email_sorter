@@ -15,6 +15,8 @@ now = datetime.now() # current date and time
 
 date_time = now.strftime("%Y-%m-%d-%H-%M-%S")
 
+os.makedirs("logs",exist_ok= True)
+
 log_file = os.path.join("logs", date_time + ".txt")
 
 
